@@ -4,8 +4,7 @@ from .models import Product
 class ProductSerializer(serializers.Serializer):
     product = serializers.CharField()
 
-class GetProductSerializer(serializers.ModelSerializer):
-
+class SavedProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = '__all__'
