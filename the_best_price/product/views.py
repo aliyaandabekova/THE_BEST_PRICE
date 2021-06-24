@@ -1,8 +1,9 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import *
-from .services import get_product
+from .services import *
 from .models import *
+from order.models import Order
 
 
 
@@ -11,10 +12,18 @@ class ProductView(APIView):
         serializer = ProductSerializer(data=request.data)
         if serializer.is_valid():
             product = serializer.data.get('product')
-            result = get_product(product)
-            Product.objects.create(name=result['name'],price=result['price'])
-            serializer1 = GetProductSerializer
-            return Response(result,status=200)
+            try:
+                result = Product.objects.get(name__contains=product)
+                Order.objects.create(profile=request.user.profile, product=result)
+                check_product_detail(result)
+                result = SavedProductSerializer(result).data
+
+                return Response({"Из текущей базы:": result}, status=200)
+            except Product.DoesNotExist:
+                result = get_product(product)
+                prod = Product.objects.create(name=result['name'],price=result['price'],shop=result['shop'],score_from_api=result['score'])
+                Order.objects.create(profile=request.user.profile, product=prod)
+                return Response(result,status=200)
 
 
 
