@@ -3,5 +3,6 @@ def calculate_avg_score(scores):
     for score in scores:
         point = score.score
         sum += point
-    sum /= len(scores)
-    return sum
+    avg_score = sum / len(scores)
+    avg_score = round(avg_score,2)
+    return avg_score
