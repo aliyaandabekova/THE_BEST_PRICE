@@ -19,4 +19,4 @@ class ShopSerializer(serializers.ModelSerializer):
     comment_set = CommentSerializer(many=True)
     class Meta:
         model = Shop
-        fields = ['name','url','avg_rate','comment_set']
+        fields = ['name','avg_rate','comment_set']
